@@ -55,6 +55,7 @@ int main() {
                 update();
                 break;
             case 2:
+                generar_reporte();
                 break;
             case 3:
                 break;
@@ -68,6 +69,50 @@ int main() {
     } while (option != 4);
     
     return 0;
+}
+void generar_reporte() {
+    std::ofstream reporte;
+    string pais_buscar;
+    std::cout << "Ingrese el nombre del país a buscar: ";
+    getline(cin, pais_buscar);
+    reporte.open("reporte_"+ pais_buscar + ".txt");
+
+    int medallas_oro_total = 0;
+    int medallas_plata_total = 0;
+    int medallas_bronce_total = 0;
+    int participaciones_total = 0;
+
+    reporte << endl << "\n--- Reporte para el país: " << pais_buscar << " ---\n";
+    reporte << endl << "----------  Atletas  -------------\n";
+
+    bool encontrado = false;
+    for (int i = 0; i < 500; i++) {
+        if (g_paises[i] == pais_buscar) {
+            encontrado = true;
+            reporte << endl << "Nombre: " << g_nombres[i] << "\n"
+                      << "Disciplina: " << g_disciplinas[i] << "\n"
+                      << "Genero: " << g_generos[i] << "\n"
+                      << "Medallas Oro: " << g_medallas_oro[i] << "\n"
+                      << "Medallas Plata: " << g_medallas_plata[i] << "\n"
+                      << "Medallas Bronce: " << g_medallas_bronce[i] << "\n"
+                      << "Participaciones: " << g_participaciones[i] << "\n"
+                      << "--------------------------\n";
+            medallas_oro_total += g_medallas_oro[i];
+            medallas_plata_total += g_medallas_plata[i];
+            medallas_bronce_total += g_medallas_bronce[i];
+            participaciones_total += g_participaciones[i];
+        }
+    }
+
+    reporte << endl << "El pais " + pais_buscar + " tiene un total de:\n";
+    reporte << "Medallas de Oro: " << medallas_oro_total << "\n";
+    reporte << "Medallas de Plata: " << medallas_plata_total << "\n";
+    reporte << "Medallas de Bronce: " << medallas_bronce_total << "\n";
+    reporte << "Participaciones: " << participaciones_total << "\n";
+
+    if (!encontrado) {
+        std::cout << "No se encontraron atletas para el país especificado.\n";
+    }
 }
 void update() {
     string nombre_buscar;
@@ -143,8 +188,6 @@ void update() {
         std::cout << "Atleta no encontrado.\n";
     }
 }
-
-
 void cargar_regiones(ifstream& archivo) {
     string linea;
     int indice = 0;
