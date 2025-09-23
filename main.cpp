@@ -22,7 +22,9 @@ void cargar_america(string region_pais);
 void cargar_asia(string region_pais);
 void cargar_europa(string region_pais);
 void cargar_oceania(string region_pais);
-
+void update();
+void generar_reporte();
+void estadisticas_globales();
 
 int main() {
     // Leer regiones
@@ -42,7 +44,7 @@ int main() {
         std::cout << "\n--- Menu de opciones ---\n"
                   << "1. Buscar y actualizar atleta \n"
                   << "2. Generar reporte analítico por país \n"
-                  << "3. Ver estadísticas globales detalladas n"
+                  << "3. Ver estadísticas globales detalladas \n"
                   << "4. Salir\n"
                   << "Seleccione una opcion (1-4): ";
         std::cin >> option;
@@ -50,14 +52,13 @@ int main() {
 
         switch (option) {
             case 1:
+                update();
                 break;
             case 2:
                 break;
             case 3:
                 break;
             case 4:
-                break; 
-            case 5:
                 std::cout << "Saliendo del programa.\n";
                 break;
             default:
@@ -68,6 +69,82 @@ int main() {
     
     return 0;
 }
+void update() {
+    string nombre_buscar;
+    std::cout << "Ingrese el nombre del atleta a buscar: ";
+    getline(cin, nombre_buscar);
+
+    bool encontrado = false;
+    for (int i = 0; i < 500; i++) {
+        if (g_nombres[i] == nombre_buscar) {
+            encontrado = true;
+            std::cout << "\n--- Atleta Encontrado ---\n"
+                      << "Nombre: " << g_nombres[i] << "\n"
+                      << "Pais: " << g_paises[i] << "\n"
+                      << "Region: " << g_region[i] << "\n"
+                      << "Disciplina: " << g_disciplinas[i] << "\n"
+                      << "Genero: " << g_generos[i] << "\n"
+                      << "Medallas Oro: " << g_medallas_oro[i] << "\n"
+                      << "Medallas Plata: " << g_medallas_plata[i] << "\n"
+                      << "Medallas Bronce: " << g_medallas_bronce[i] << "\n"
+                      << std::endl;
+            int option;
+            std::cout << "\n--- Selecciona Medallas y Participaciones ---\n"
+                    << "1. Medalla Oro \n"
+                    << "2. Medalla Plata \n"
+                    << "3. Medalla Bronce n"
+                    << "4. Participaciones\n"
+                    << "5. Salir \n"
+                    << "Seleccione una opcion (1-5): ";
+            std::cin >> option;
+            std::cin.ignore(); // Limpiar el buffer de entrada
+            switch (option) {
+                case 1:
+                    std::cout << "Ingrese la cantidad de medallas de oro a modificar: ";
+                    int medallas_oro;
+                    std::cin >> medallas_oro;
+                    g_medallas_oro[i] = medallas_oro;
+                    std::cout << "Medallas de oro actualizadas a " << g_medallas_oro[i] << ".\n";
+                    break;
+                case 2:
+                    std::cout << "Ingrese la cantidad de medallas de plata a modificar: ";
+                    int medallas_plata;
+                    std::cin >> medallas_plata;
+                    g_medallas_plata[i] = medallas_plata;
+                    std::cout << "Medallas de plata actualizadas a " << g_medallas_plata[i] << ".\n";
+                    break;
+                case 3:
+                    std::cout << "Ingrese la cantidad de medallas de bronce a modificar: ";
+                    int medallas_bronce;
+                    std::cin >> medallas_bronce;
+                    g_medallas_bronce[i] = medallas_bronce;
+                    std::cout << "Medallas de bronce actualizadas a " << g_medallas_bronce[i] << ".\n";
+                    break;
+                case 4:
+                    std::cout << "Ingrese la cantidad de participaciones a modificar: ";
+                    int participaciones;
+                    std::cin >> participaciones;
+                    g_participaciones[i] = participaciones;
+                    std::cout << "Participaciones actualizadas a " << g_participaciones[i] << ".\n";
+                    break; 
+                case 5:
+                    std::cout << "Saliendo del programa.\n";
+                    break;
+                default:
+                    std::cout << "Opcion no valida. Intente de nuevo.\n";
+                    break;
+            }
+        }
+            break; // Salir del bucle una vez que se encuentra el atleta
+        
+    }
+
+    if (!encontrado) {
+        std::cout << "Atleta no encontrado.\n";
+    }
+}
+
+
 void cargar_regiones(ifstream& archivo) {
     string linea;
     int indice = 0;
