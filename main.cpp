@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <limits> // Necesario para la validación de entrada numérica
 
 using namespace std;
 
@@ -53,8 +54,13 @@ int main() {
                   << "3. Ver estadísticas globales detalladas \n"
                   << "4. Salir\n"
                   << "Seleccione una opcion (1-4): ";
-        std::cin >> option;
-        std::cin.ignore(); // Limpiar el buffer de entrada
+        // validación de entrada numérica
+        while (!(cin >> option) || option < 1 || option > 4) {
+            cout << "Entrada no válida. Por favor, ingrese un número entre 1 y 4: ";
+            cin.clear(); // Limpia el estado de error de cin
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta la entrada incorrecta
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Limpiar el buffer para futuros getline
 
         switch (option) {
             case 1:
@@ -148,7 +154,13 @@ void generar_reporte() {
     std::ofstream reporte;
     string pais_buscar;
     std::cout << "Ingrese el nombre del país a buscar: ";
-    getline(cin, pais_buscar);
+    do {
+        cout << "Ingrese el nombre del país a buscar: ";
+        getline(cin, pais_buscar);
+        if (pais_buscar.empty()) {
+            cout << "El nombre del país no puede estar vacío. Intente de nuevo.\n";
+        }
+    } while (pais_buscar.empty());
     reporte.open("reporte_"+ pais_buscar + ".txt");
 
     int medallas_oro_total = 0;
@@ -192,8 +204,13 @@ void generar_reporte() {
 // Función para buscar y actualizar datos de un atleta
 void update() {
     string nombre_buscar;
-    std::cout << "Ingrese el nombre del atleta a buscar: ";
-    getline(cin, nombre_buscar);
+    do {
+        cout << "Ingrese el nombre del atleta a buscar: ";
+        getline(cin, nombre_buscar);
+        if (nombre_buscar.empty()) {
+            cout << "Error. Intente de nuevo.\n";
+        }
+    } while (nombre_buscar.empty());
 
     bool encontrado = false;
     for (int i = 0; i < 500; i++) {
@@ -218,13 +235,20 @@ void update() {
                     << "4. Participaciones \n"
                     << "5. Salir \n"
                     << "Seleccione una opcion (1-5): ";
-            std::cin >> option;
-            std::cin.ignore(); // Limpiar el buffer de entrada
+            while (!(cin >> option) || option < 1 || option > 5) {
+                cout << "Entrada no válida. Por favor, ingrese un número entre 1 y 5: ";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
             switch (option) {
                 case 1:
                     std::cout << "Ingrese la cantidad de medallas de oro a modificar: ";
                     int medallas_oro;
-                    std::cin >> medallas_oro;
+                    while (!(cin >> medallas_oro) || medallas_oro < 0) {
+                        cout << "Entrada no válida. Por favor, ingrese un número positivo: ";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
                     g_medallas_oro[i] = medallas_oro;
                     update_csv(g_nombres[i], g_paises[i], g_region[i]);
                     std::cout << "Medallas de oro actualizadas a " << g_medallas_oro[i] << ".\n";
@@ -232,7 +256,11 @@ void update() {
                 case 2:
                     std::cout << "Ingrese la cantidad de medallas de plata a modificar: ";
                     int medallas_plata;
-                    std::cin >> medallas_plata;
+                    while (!(cin >> medallas_plata) || medallas_plata < 0) {
+                        cout << "Entrada no válida. Por favor, ingrese un número positivo: ";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
                     g_medallas_plata[i] = medallas_plata;
                     update_csv(g_nombres[i], g_paises[i], g_region[i]);
                     std::cout << "Medallas de plata actualizadas a " << g_medallas_plata[i] << ".\n";
@@ -240,7 +268,11 @@ void update() {
                 case 3:
                     std::cout << "Ingrese la cantidad de medallas de bronce a modificar: ";
                     int medallas_bronce;
-                    std::cin >> medallas_bronce;
+                    while (!(cin >> medallas_bronce) || medallas_bronce < 0) {
+                        cout << "Entrada no válida. Por favor, ingrese un número positivo: ";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
                     g_medallas_bronce[i] = medallas_bronce;
                     update_csv(g_nombres[i], g_paises[i], g_region[i]);
                     std::cout << "Medallas de bronce actualizadas a " << g_medallas_bronce[i] << ".\n";
@@ -248,7 +280,11 @@ void update() {
                 case 4:
                     std::cout << "Ingrese la cantidad de participaciones a modificar: ";
                     int participaciones;
-                    std::cin >> participaciones;
+                    while (!(cin >> participaciones) || participaciones < 0) {
+                        cout << "Entrada no válida. Por favor, ingrese un número positivo: ";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    }
                     g_participaciones[i] = participaciones;
                     update_csv(g_nombres[i], g_paises[i], g_region[i]);
                     std::cout << "Participaciones actualizadas a " << g_participaciones[i] << ".\n";
@@ -260,6 +296,7 @@ void update() {
                     std::cout << "Opcion no valida. Intente de nuevo.\n";
                     break;
             }
+            break; // Salir del ciclo una vez encontrado y procesado el atleta.
         }        
     }
 
